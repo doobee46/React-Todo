@@ -26,6 +26,12 @@ handleChange = event => {
     });
 };
 
+handleReload =()=>{
+  this.setState({
+    todos:[],
+  })
+}
+
 handleKeyPress = event =>{
     const task = {
       task: this.state.task,
@@ -82,8 +88,9 @@ handleFilter = () =>{
 
 handleSearch = () =>{
  let search = this.state.query.trim().toLowerCase();
- const arr = this.state.todos.filter(todo =>{
-    return todo.task.toLowerCase().match(search);
+ const todos = this.state.todos
+ const arr = todos.filter(todo =>{
+    return todo.task.toLowerCase().includes(search);
  })
   this.setState({
     query:'',
@@ -91,25 +98,26 @@ handleSearch = () =>{
   })
 }
 
-componentDidMount() {
-  localStorage.getItem('todos') && this.setState({
-    todos: JSON.parse(localStorage.getItem('todos')),
-  })
-}
-componentWillUpdate(nextProps, state) {
-  localStorage.setItem('todos', JSON.stringify(state.todos))
-}
+// componentDidMount() {
+//   localStorage.getItem('todos') && this.setState({
+//     todos: JSON.parse(localStorage.getItem('todos')),
+//   })
+// }
+// componentWillUpdate(nextProps, state) {
+//   localStorage.setItem('todos', JSON.stringify(state.todos))
+// }
 
   render() {
     return (
       <div className="container">
         <div className="todo-container">
           <div className="todo-header">
-            <h1>Todos</h1>
+            <h1 onClick={this.handleReload}>Todos</h1>
             <SearchTodo 
             search={this.handleSearch} 
             value={this.state.query} 
-            update={this.handleChange}/>
+            update={this.handleChange}
+            />
           </div>
           <TodoList taskLists={this.state.todos} selected={this.handleSelected}/>
           <TodoForm
